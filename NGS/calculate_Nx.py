@@ -32,12 +32,12 @@ temp_sum = 0
 for e in fasta_list:
 	temp_nf_list.append(e)
 	temp_sum += len(e)
-	if nf_length >= temp_sum:
-		next
-	else:
+	if temp_sum >= nf_length:
 		nf_seq = int(len(e))
 		break
+	else:
+		continue 
 
-print("N50: %i" %(nf_seq))
+print("N%i: %i" %(nf,nf_seq))
 print("#Sequences: %i" %(len(fasta_list)))
 print("Total bases: %i" %(tot_length))
