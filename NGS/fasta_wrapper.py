@@ -4,7 +4,7 @@ from Bio import SeqIO
 import sys, os, textwrap, getopt
 
 __author__ = 'Kumar'
-__desc__ = 'This scripts reads a fasta file and wraps the sequences in to any input line width (Default is 60 characters per line).'
+__desc__ = 'This script reads a fasta file and wraps the sequences in to any input line width (Default is 60 characters per line).'
 
 width = int(60)
 fasta_file = ''
