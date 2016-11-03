@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 """
 Usage:python calculate_Nx.py <fasta_file> <minimum_length> <Nx>
 The script takes a fasta file with minium sequence to consider and Nx. The default minimum sequence is 0 and Nx is N50.

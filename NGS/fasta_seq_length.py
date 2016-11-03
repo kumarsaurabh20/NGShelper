@@ -33,7 +33,8 @@ except getopt.GetoptError as e:
 
 try:
 	for s in SeqIO.parse(fasta_file, "fasta"):
-		temp = s.id.split("|")[1]
+		#temp = s.id.split("")[0]
+		temp = str(s.id)
 		print("%s\t%i"%(temp,len(s.seq)))
 except IOError:
 	print("Usage: %s -f <fasta file> -s <header delimiter> -b <header block>" %(sys.argv[0]))
