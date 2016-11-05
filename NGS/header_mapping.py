@@ -39,6 +39,7 @@ try:
 	file.close
 except IOError:
 	print("Usage:: %s -f <fasta file> -m <mapping file>" % sys.argv[0])
+	sys.exit(2)
 
 try:
 	for s in SeqIO.parse(fasta_file, "fasta"):
@@ -47,3 +48,4 @@ try:
 				print(">%s\n%s"%(value, str(s.seq)))
 except IOError:
 	print("Usage:: %s -f <fasta file> -m <mapping file>" % sys.argv[0])
+	sys.exit(2)
