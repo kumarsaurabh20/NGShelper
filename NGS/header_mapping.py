@@ -6,7 +6,7 @@ import sys, os, textwrap, getopt
 __author__ = 'Kumar'
 
 """
-Mapping file (col1: original_name; col2: replacing_name):
+Mapping file:
 
 scaffold1|size2271171   Scaffold00001
 scaffold2|size2035591   Scaffold00002
