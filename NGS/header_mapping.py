@@ -24,11 +24,11 @@ try:
 		if o == '-f':
 			fasta_file = str(a)
 		elif o == '-m':
-			min_length = str(a)   
+			map_file = str(a)   
 except getopt.GetoptError as e:
-   print(str(e))
-   print("Usage:: %s -f <fasta file> -m <mapping file>" % sys.argv[0])
-   sys.exit(2)   
+	print(str(e))
+	print("Usage:: %s -f <fasta file> -m <mapping file>" % sys.argv[0])
+	sys.exit(2)   
 
 old_header = {}
 try:
