@@ -24,7 +24,7 @@ try:
 			min_length = int(a)
 		elif o == '-n':
 			nf = int(a)
-
+#N50
 except getopt.GetoptError as e:
    print(str(e))
    print("Usage:: %s -f 'fasta file' -l 'minimum length' -n Nx" % sys.argv[0])
