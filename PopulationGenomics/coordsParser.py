@@ -52,9 +52,6 @@ cf = open(coords_file, "r")
 for line in cf:
 	result = pattern.match(line)
 	if result != None:	
-		#print(result.groups())
-		#print(result.group(1).split(" "))
-		#ref_start, ref_end = re.split("\s+", result.group(1)))
 		if filter_id != None:
 			if result.group(7) >= filter_id:
 				ref_start.append(result.group(1))
