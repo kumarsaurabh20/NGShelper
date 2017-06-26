@@ -63,8 +63,6 @@ for line in cf:
 				pid.append(result.group(7))
 				ref.append(result.group(8))
 				qry.append(result.group(9))
-				#print("%s:::::%s"% (ref_start, ref_end))
-				#print("%s:::::%s"% (ref, qry))
 			else:
 				pass
 	else:
