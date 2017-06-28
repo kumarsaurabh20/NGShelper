@@ -52,11 +52,7 @@ cf = open(coords_file, "r")
 for line in cf:
 	result = pattern.match(line)
 	if result != None:	
-		#print(result.groups())
-		#print(result.group(1).split(" "))
-		#ref_start, ref_end = re.split("\s+", result.group(1)))
 		if filter_id.has_key("ID"):
-		#	print(filter_id)
 			if float(result.group(7)) >= float(filter_id["ID"]):
 				ref_start.append(result.group(1))
 				ref_end.append(result.group(2))
@@ -67,10 +63,6 @@ for line in cf:
 				pid.append(result.group(7))
 				ref.append(result.group(8))
 				qry.append(result.group(9))
-				#print("this is with filter")
-				#print(pid)
-				#print("%s:::::%s"% (ref_start, ref_end))
-				#print("%s:::::%s"% (ref, qry))
 			else:
 				continue
 		else:
@@ -83,10 +75,6 @@ for line in cf:
 			pid.append(result.group(7))
 			ref.append(result.group(8))
 			qry.append(result.group(9))
-			#print("this is without filter")
-			#print(pid)
-			#print("%s:::::%s"% (ref_start, ref_end))
-			#print("%s:::::%s"% (ref, qry))
 	else:
 		continue
 
