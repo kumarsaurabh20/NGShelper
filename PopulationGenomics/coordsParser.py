@@ -26,12 +26,9 @@ try:
 
 	parser.add_argument("-c", "--coords", action="store", required=True, help="Input mummer based coords file")
 	parser.add_argument("-f", "--filter_string", type=string_to_hash, action="store", required=False, help="Set if filtering is required based on percentage identity or length or with chromosomes/scaffolds (default: no filters). -p <ID:float length:int chrom:Scaffold001>.")
-	#parser.add_argument("-p", "--prefix", action="store", required=False, help="Prefix for the output files.")
 
 	args = parser.parse_args()
-	##populate global variables
 	coords_file = args.coords
-	#if args.prefix: out_prefix = args.prefix
 	if args.filter_string: filter_map = args.filter_string
 
 except argparse.ArgumentError as e:
@@ -44,9 +41,6 @@ cf = open(coords_file, "r")
 for line in cf:
 	result = pattern.match(line)
 	if result != None:	
-		#print(result.groups())
-		#print(result.group(1).split(" "))
-		#ref_start, ref_end = re.split("\s+", result.group(1)))
 		if not filter_map:
 			ref_start.append(result.group(1))
                         ref_end.append(result.group(2))
@@ -57,11 +51,6 @@ for line in cf:
                         pid.append(result.group(7))
                         ref.append(result.group(8))
                         qry.append(result.group(9))
-                        print("this is without filter")
-                        print(pid)
-                        #print("%s:::::%s"% (ref_start, ref_end))
-                        #print("%s:::::%s"% (ref, qry))
-		#	print(filter_id)
 		else:
 			if filter_map.has_key("length"):
 				if filter_map.has_key("chrom"):
@@ -76,10 +65,6 @@ for line in cf:
 							pid.append(result.group(7))
 							ref.append(result.group(8))
 							qry.append(result.group(9))
-							print("this is with chrom and ID and length filter")
-							print(qry_len)
-							#print("%s:::::%s"% (ref_start, ref_end))
-							#print("%s:::::%s"% (ref, qry))
 						else:
 							continue
 					else:
@@ -95,8 +80,6 @@ for line in cf:
 							qry.append(result.group(9))
 							print("this is with chrom and length filter")
 							print(qry_len)
-							#print("%s:::::%s"% (ref_start, ref_end))
-							#print("%s:::::%s"% (ref, qry))	
 						else:
 							continue
 				elif filter_map.has_key("ID"):
@@ -110,10 +93,6 @@ for line in cf:
 						pid.append(result.group(7))
 						ref.append(result.group(8))
 						qry.append(result.group(9))
-						print("this is with length and ID filter")
-						print(qry_len)
-						#print("%s:::::%s"% (ref_start, ref_end))
-						#print("%s:::::%s"% (ref, qry))
 					else:
 						continue
 				else:
@@ -127,8 +106,6 @@ for line in cf:
 						pid.append(result.group(7))
 						ref.append(result.group(8))
 						qry.append(result.group(9))
-						print("this is with length filter")
-						print(qry_len)
 					else:
 						continue
 			elif filter_map.has_key("chrom"):
@@ -143,10 +120,6 @@ for line in cf:
 						pid.append(result.group(7))
 						ref.append(result.group(8))
 						qry.append(result.group(9))
-						print("this is with chrom and id filter")
-						print(qry_len)
-						#print("%s:::::%s"% (ref_start, ref_end))
-						#print("%s:::::%s"% (ref, qry))
 					else:
 						continue
 				else:
@@ -160,8 +133,6 @@ for line in cf:
 						pid.append(result.group(7))
 						ref.append(result.group(8))
 						qry.append(result.group(9))
-						print("this is with chrom filter")
-						print(qry_len)
 					else:
 						continue
 					
@@ -176,10 +147,6 @@ for line in cf:
 					pid.append(result.group(7))
 					ref.append(result.group(8))
 					qry.append(result.group(9))
-					print("this is with ID filter")
-					print(qry_len)
-					#print("%s:::::%s"% (ref_start, ref_end))
-					#print("%s:::::%s"% (ref, qry))
 				else:
 					continue
 			else:
