@@ -4,47 +4,39 @@ import sys, argparse, re
 
 __author__ = 'Kumar'
 
-coords_file = ''
-ref_map, filter_id, filter_len, filter_chrom = ({} for i in range(4))
+coords_file = "" #out_prefix = ("" for i in range(2))
+ref_map, filter_map = ({} for i in range(2))
 ref_start, ref_end, qry_start, qry_end, pid, ref, qry, ref_len, qry_len = ([] for i in range(9))
 
 def string_to_hash(arg):
-        temp = {}
-        pattern = re.compile("\w+:[\w\d\.]+")
-        if pattern.match(arg):
-                value = str(arg).split(":")
-                if value[0] == "ID":
-                        temp["ID"] = float(value[1])
-                elif value[0] == "length":
-                        temp["length"] = int(value[1])
-                elif value[0] == "chrom":
-                        temp["chrom"] = str(value[1])
-                else:
-                        pass
-        else:
-                raise argparse.ArgumentTypeError("Oops!! bad input values.")
-        return temp
+	dummy = {}
+	pattern = re.compile("(\w+:[\d\w.]+){1,3}")
+	if pattern.match(arg):
+		temp = arg.split(" ")
+		for e in temp:
+			temp2 = e.split(":")
+			dummy[str(temp2[0])] = temp2[1]
+	else:
+		raise argparse.ArgumentTypeError("Oops!! bad input values.")
+	return dummy
 
 ##parse command line arguments
 try:
 	parser = argparse.ArgumentParser("Script for parsing Mummer/Nucmer based coords file.")
 
 	parser.add_argument("-c", "--coords", action="store", required=True, help="Input mummer based coords file")
-	parser.add_argument("-p", "--filter_id", type=string_to_hash, action="store", required=False, help="Set if filtering is required based on percentage identity (default: no filters). -p <ID:float> ")
-	parser.add_argument("-l", "--filter_len", type=string_to_hash,  action="store", required=False, help="Set if filtering is required based on reference/query alignment lengths (default: no filters). -l <lenth:int>")
-	parser.add_argument("-s", "--filter_chrom",type=string_to_hash, action="store", required=False, help="Set if filtering is required based on a particular scaffold/contig/chromosome from reference (default: no filters). -s <chrom:str>")
+	parser.add_argument("-f", "--filter_string", type=string_to_hash, action="store", required=False, help="Set if filtering is required based on percentage identity or length or with chromosomes/scaffolds (default: no filters). -p <ID:float length:int chrom:Scaffold001>.")
+	#parser.add_argument("-p", "--prefix", action="store", required=False, help="Prefix for the output files.")
 
 	args = parser.parse_args()
 	##populate global variables
 	coords_file = args.coords
-	
-	if args.filter_id: filter_id = args.filter_id
-	if args.filter_len: filter_len = args.filter_len
-	if args.filter_chrom: filter_chrom = args.filter_chrom
+	#if args.prefix: out_prefix = args.prefix
+	if args.filter_string: filter_map = args.filter_string
 
 except argparse.ArgumentError as e:
 	parser.print_help()
-	sys.exit(2)
+	sys.exit(1)
 
 ##parse the coords file based on regular expression (the coords file is not perfectly tab separated)
 pattern = re.compile('\s+(\d+)\s+(\d+)\s+\|\s+(\d+)\s+(\d+)\s+\|\s+(\d+)\s+(\d+)\s+\|\s+(\d+.\d+)\s+\|\s+(.+)\s+(.+)[\s\n\t]')
@@ -52,29 +44,146 @@ cf = open(coords_file, "r")
 for line in cf:
 	result = pattern.match(line)
 	if result != None:	
-		if filter_id.has_key("ID"):
-			if float(result.group(7)) >= float(filter_id["ID"]):
-				ref_start.append(result.group(1))
-				ref_end.append(result.group(2))
-				qry_start.append(result.group(3))
-				qry_end.append(result.group(4))
-				ref_len.append(result.group(5))
-				qry_len.append(result.group(6))
-				pid.append(result.group(7))
-				ref.append(result.group(8))
-				qry.append(result.group(9))
+		#print(result.groups())
+		#print(result.group(1).split(" "))
+		#ref_start, ref_end = re.split("\s+", result.group(1)))
+		if not filter_map:
+			ref_start.append(result.group(1))
+                        ref_end.append(result.group(2))
+                        qry_start.append(result.group(3))
+                        qry_end.append(result.group(4))
+                        ref_len.append(result.group(5))
+                        qry_len.append(result.group(6))
+                        pid.append(result.group(7))
+                        ref.append(result.group(8))
+                        qry.append(result.group(9))
+                        print("this is without filter")
+                        print(pid)
+                        #print("%s:::::%s"% (ref_start, ref_end))
+                        #print("%s:::::%s"% (ref, qry))
+		#	print(filter_id)
+		else:
+			if filter_map.has_key("length"):
+				if filter_map.has_key("chrom"):
+					if filter_map.has_key("ID"):
+						if str(result.group(8)) == str(filter_map["chrom"]) and float(result.group(7)) >= float(filter_map["ID"]) and int(result.group(6)) >= int(filter_map["length"]):
+ 							ref_start.append(result.group(1))
+							ref_end.append(result.group(2))
+							qry_start.append(result.group(3))
+							qry_end.append(result.group(4))
+							ref_len.append(result.group(5))
+							qry_len.append(result.group(6))
+							pid.append(result.group(7))
+							ref.append(result.group(8))
+							qry.append(result.group(9))
+							print("this is with chrom and ID and length filter")
+							print(qry_len)
+							#print("%s:::::%s"% (ref_start, ref_end))
+							#print("%s:::::%s"% (ref, qry))
+						else:
+							continue
+					else:
+						if str(result.group(8)) == str(filter_map["chrom"]) and int(result.group(6)) >= int(filter_map["length"]):
+							ref_start.append(result.group(1))
+							ref_end.append(result.group(2))
+							qry_start.append(result.group(3))
+							qry_end.append(result.group(4))
+							ref_len.append(result.group(5))
+							qry_len.append(result.group(6))
+							pid.append(result.group(7))
+							ref.append(result.group(8))
+							qry.append(result.group(9))
+							print("this is with chrom and length filter")
+							print(qry_len)
+							#print("%s:::::%s"% (ref_start, ref_end))
+							#print("%s:::::%s"% (ref, qry))	
+						else:
+							continue
+				elif filter_map.has_key("ID"):
+					if int(result.group(6)) >= int(filter_map["length"]) and float(result.group(7)) == float(filter_map["ID"]):
+						ref_start.append(result.group(1))
+						ref_end.append(result.group(2))
+						qry_start.append(result.group(3))
+						qry_end.append(result.group(4))
+						ref_len.append(result.group(5))
+						qry_len.append(result.group(6))
+						pid.append(result.group(7))
+						ref.append(result.group(8))
+						qry.append(result.group(9))
+						print("this is with length and ID filter")
+						print(qry_len)
+						#print("%s:::::%s"% (ref_start, ref_end))
+						#print("%s:::::%s"% (ref, qry))
+					else:
+						continue
+				else:
+					if int(result.group(6)) >= int(filter_map["length"]):
+						ref_start.append(result.group(1))
+						ref_end.append(result.group(2))
+						qry_start.append(result.group(3))
+						qry_end.append(result.group(4))
+						ref_len.append(result.group(5))
+						qry_len.append(result.group(6))
+						pid.append(result.group(7))
+						ref.append(result.group(8))
+						qry.append(result.group(9))
+						print("this is with length filter")
+						print(qry_len)
+					else:
+						continue
+			elif filter_map.has_key("chrom"):
+				if filter_map.has_key("ID"):
+					if str(result.group(8)) == str(filter_map["chrom"]) and float(result.group(7)) == float(filter_map["ID"]):
+						ref_start.append(result.group(1))
+						ref_end.append(result.group(2))
+						qry_start.append(result.group(3))
+						qry_end.append(result.group(4))
+						ref_len.append(result.group(5))
+						qry_len.append(result.group(6))
+						pid.append(result.group(7))
+						ref.append(result.group(8))
+						qry.append(result.group(9))
+						print("this is with chrom and id filter")
+						print(qry_len)
+						#print("%s:::::%s"% (ref_start, ref_end))
+						#print("%s:::::%s"% (ref, qry))
+					else:
+						continue
+				else:
+					if str(result.group(8)) == str(filter_map["chrom"]):
+						ref_start.append(result.group(1))
+						ref_end.append(result.group(2))
+						qry_start.append(result.group(3))
+						qry_end.append(result.group(4))
+						ref_len.append(result.group(5))
+						qry_len.append(result.group(6))
+						pid.append(result.group(7))
+						ref.append(result.group(8))
+						qry.append(result.group(9))
+						print("this is with chrom filter")
+						print(qry_len)
+					else:
+						continue
+					
+			elif filter_map.has_key("ID"):	
+				if float(result.group(7)) >= float(filter_map["ID"]):
+					ref_start.append(result.group(1))
+					ref_end.append(result.group(2))
+					qry_start.append(result.group(3))
+					qry_end.append(result.group(4))
+					ref_len.append(result.group(5))
+					qry_len.append(result.group(6))
+					pid.append(result.group(7))
+					ref.append(result.group(8))
+					qry.append(result.group(9))
+					print("this is with ID filter")
+					print(qry_len)
+					#print("%s:::::%s"% (ref_start, ref_end))
+					#print("%s:::::%s"% (ref, qry))
+				else:
+					continue
 			else:
 				continue
-		else:
-			ref_start.append(result.group(1))
-			ref_end.append(result.group(2))
-			qry_start.append(result.group(3))
-			qry_end.append(result.group(4))
-			ref_len.append(result.group(5))
-			qry_len.append(result.group(6))
-			pid.append(result.group(7))
-			ref.append(result.group(8))
-			qry.append(result.group(9))
 	else:
 		continue
 
