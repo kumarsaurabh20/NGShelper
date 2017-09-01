@@ -35,7 +35,7 @@ except IOError:
 fasta_list.sort(cmp=lambda x,y: cmp(len(y),len(x)))				
 fasta_str = str("".join(fasta_list))
 
-for i in range(0, len(fasta_str)):
+for i in range(0, len(fasta_str) - kmer + 1):
 	temp = fasta_str[i:i+kmer]
 	if temp in kmer_hash:
                 kmer_hash[temp] += 1

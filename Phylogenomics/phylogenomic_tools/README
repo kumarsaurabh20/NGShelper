@@ -1,0 +1,89 @@
+This directory contains some simple tools, written in the C language, that
+accompany the chapter "UCSC resources for phylogenomics" in a book about
+phylogenomics in the series Methods in Molecular Biology (Humana Press),
+edited by Bill Murphy. The chapter's three case studies, and the
+corresponding tools, are as given under items 1-3, below. In addition,
+we include a tool that was used for the paper "Using genomic data to unravel
+root of the placental mammal phylogeny", by William J. Murphy, Thomas H.
+Pringle, Tess Crider, Mark S. Springer and Webb Miller, published in Genome
+Research in 2007; see item 4.
+
+1. interspersed repeats
+
+  rpt_simplify -- simplify a RepeatMasker ".out" file. RepeatMasker produces
+    much information for each identified interspersed-repeat element, and
+    this program reduces the file to something simpler. RNA genes and
+    low-complexity region are ignored.
+
+  rpt_seek -- (1) read the output of rpt_simplify for repeats in seq1, (2) a
+    seq1-seq2 pairwise alignment computed by blastz and (3) a seq1-seq3
+    alignment; look for repeats that are contained in seq2 but look like they
+    inserted in a seq1-seq2 ancestor after divergence from seq3's lineage.
+
+  single_cov -- trim blastz alignments so that no reference-sequence position
+    is aligned more than once. For the first example in the book, alignments
+    were computed by Unix commands like:
+	blastz human dog B=0 C=2 H=2000 Y=2000 | single_cov > human.dog.bz
+
+2. insertions/deletions in protein-coding regions
+
+  coding_exons -- given a UCSC-format file of gene positions, extract a list
+    of coding-exon positions, including orientation of transcription and phase,
+    for a specified chromosome. The coding_exons command is called with two
+    arguments, as in:
+		coding_exons RefSeq.txt chr22
+    Here RefSeq.txt is a file of gene positions downloaded from Santa Cruz.
+    Output lines (written to standard output) have the form
+		chr22 20374240 20374339 +
+    Interval end-points follow the Santa Cruz convention of being 0-based
+    and "half open" (meaning that the second number given is one position
+    after the end of the exon. The sign ('+' or '-') gives the transcriptional
+    orientation.
+
+  coding_indels -- a command line looks like:
+	coding_indels coding-exons-output hum.sp1.axt hum.sp2.axt hum.sp3.axt
+    where the first argument is the output of the coding_exons program, and
+    the other arguments are axt-format pairwise alignments for human (or
+    more generally the reference sequence) vs. three other species. The
+    program looks for coding exons where :
+	(1) for each of the 3 species, the exon is in a single local alignment,
+	(2) there is no gap in the alignment to species 1,
+	(3) alignments to species 2 and to species 3 have gaps in precisely the
+	    same places, and all gaps have a multiple-of-three length
+
+3. chromosome breaks
+
+  shared_breaks -- reads (1) a file of sequence names separated into two groups
+    by a line starting with a dash ('-') and (2) a "maf"-formatted multiple
+    alignment relative to some reference sequence (named first in file (1);
+    finds positions in the reference sequence where the first-named species
+    (i.e., before the dash) are continuous and all of the other species have
+    discontinuities.
+
+4. insertions/deletions in protein-coding regions (a la Genome Research paper)
+
+  coding_indels17 -- a command line looks like:
+	coding_indels17 chr_17way.maf coding-exons-output sp1 sp2 sp3
+    where
+	chr_17way.maf is the maf-formatted multi-alignment for a chosen
+	  chromosome, downloaded from UCSC
+	coding-exons-output is the output of the coding_exons program (see
+	  item 2, above) for the chosen chromosome
+	the last three arguments are species names (in the multi-alignment).
+    The program looks for coding exons where :
+	(1) in each of the three implied pairwise alignments, the exon is in a
+	   single local alignment (maybe split across several multi-way blocks),
+	(2) alignments to sp2 and to sp3 have a single gap in precisely
+	   the same places, and its length is a multiple of three,
+	(3) there is no gap in the alignment to sp1 near the gap relative to
+	   species 2 and 3.
+    For instance, UCSC uses the names "dasNov" for armadillo, "loxAfr" for
+      elephant, and monDom for opossum. Thus, to find exons supporting the
+      phylogenetic grouping ((human armadillo) elephant), replace "sp1 sp2 sp3"
+      by "dasNov loxAfr monDom", for ((human elephant) armadillo) use
+      "loxAfr dasNov monDom", and for (human (armadillo elephant)) use
+      "monDom dasNov loxAfr".
+
+These programs rely on a four files of "utility" programs:
+  lib.c and lib.h -- programs for commonly used operations
+  maf.c and maf.h -- programs for reading multiple alignments in "maf" format
