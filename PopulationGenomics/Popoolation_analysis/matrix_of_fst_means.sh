@@ -24,6 +24,7 @@ range=$(($total_cells + 5))
 cut -f6-$range $fstfile > filtered.fst
 file="filtered.fst"
 #
+##https://github.com/fearside/ProgressBar/blob/master/progressbar.sh
 function ProgressBar {
         let _progress=(${1}*100/${2}*100)/100
         let _done=(${_progress}*4)/10
