@@ -48,21 +48,19 @@ def gffExtractSingleExon(gffDict, prefix = out):
 #extract all genes with multiple transcripts based on the locus. (Gene1 -> mRNA1 + mRNA2.......)
 #write a fasta file with spliced exons for each GFF transcript
 #write a fasta file with spliced CDS for each GFF transcript
-def extractSplicedTranscripts(gffDict):
+#discard multi-exon mRNAs that have any intron with a non-canonical splice site consensus (i.e. not GT-AG, GC-AG or AT-AC)
+def extractSplicedTranscripts(gffDict, countData):
 
 #check which genes are missing from A based on comparison with B
 def gffIntersect(gffDict1, gffDict2):
 
 #write a protein fasta file with the translation of CDS for each record
-def translateCDSFasta(gff, fasta_file)
-
-#discard multi-exon mRNAs that have any intron with a non-canonical splice site consensus (i.e. not GT-AG, GC-AG or AT-AC)
+def translateCDSFasta(cdsGff, fasta_file)
 
 #discard any mRNAs that either lack initial START codon or the terminal STOP codon, or have an in-frame stop codon (only print mRNAs with a fulll, valid CDS)
-
 #Report any mRNAs with CDS having in-frame stop codons
-
 #expose (warn about) duplicate transcript IDs and other potential problems with the given GFF/GTF records
+def polishGFF(gff, fasta_file):
 
 #replace IDs using the map file
 def mapIDs(feature = "mRNA", mapFile):
