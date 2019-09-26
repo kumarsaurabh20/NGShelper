@@ -35,7 +35,7 @@ try:
 	file = open(map_file, "r")
 	for line in file:
 		temp = line.split("\t")
-		old_header[temp[0]] = temp[1]
+		old_header[temp[0]] = temp[1].strip()
 	file.close
 except IOError:
 	print("Usage:: %s -f <fasta file> -m <mapping file>" % sys.argv[0])
