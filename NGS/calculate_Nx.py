@@ -72,7 +72,7 @@ for e in fasta_list:
 		continue 
 
 print(" ")
-print("########## Assembly Statistics ##########")
+print("########## Assembly Stats  ##########")
 print(" ")
 print("N%i: %i" %(nf,n50))
 print(" ")
@@ -92,5 +92,5 @@ print("Total bases: %i" %(tot_length))
 print(" ")
 print("GC content: %f" %(GC_content))
 print(" ")
-print("############################################")
+print("#########################################")
 print(" ")
