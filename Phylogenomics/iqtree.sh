@@ -20,7 +20,5 @@ echo "Hello $USER, this is running on the $SLURM_CLUSTER_NAME cluster at `hostna
 module load DefaultModules shared Workspace/v1 slurm/18.08.4 Conda/Python2/2.7.15 ks575/BioPython/v1.74 VCFtools/0.1.16 
 module load bcftools/1.9 samtools/1.9 ks575/IQ-tree/v2.0.3
 ##
-cd /nobackup/beegfs/workspace/ks575/Data/Myzus/Myzus_mapping/Trimmed_Resequencing_Data_18_03_2019/haplotypes/new_phylips
-work_dir="/nobackup/beegfs/workspace/ks575/Data/Myzus/Myzus_mapping/Trimmed_Resequencing_Data_18_03_2019/haplotypes/new_phylips"
-iqtree -s $work_dir/Ch2.57Mb.phased.min125.phy -cmax 15 -B 10000 -alrt 10000 -bnni -T AUTO
-iqtree -s $work_dir/Ch4.44Mb.phased.min128.phy -cmax 15 -B 10000 -alrt 10000 -bnni -T AUTO
+iqtree -s Ch2.phased.phy -cmax 15 -B 10000 -alrt 10000 -bnni -T AUTO
+iqtree -s Ch4.phased.phy -cmax 15 -B 10000 -alrt 10000 -bnni -T AUTO
