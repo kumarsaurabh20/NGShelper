@@ -5,6 +5,8 @@ from optspec import Options
 """
 Usage:python geneAnnoFromSnps.py --snps <snp file> --gff3 <gff3 file>
 The script takes a snp file in a vcf format and a gff3 file for single chromosomes. It uses SNP coordinates to fetch genes overlapping the SNP. 
+The VCF file has to be filterd and retain only coordinates and id information along with the chromosome. You can do it using the command awk '{print $1, $2, $3}' test.vcf > test2.vcf
+
 Author: Kumar Saurabh Singh (ks575@exeter.ac.uk)
 """
 
