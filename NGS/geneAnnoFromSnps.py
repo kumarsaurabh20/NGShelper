@@ -3,8 +3,8 @@ import sys
 from optspec import Options
 
 """
-Usage:python calculate_Nx.py <fasta_file> <minimum_length> <Nx>
-The script takes a fasta file with minium sequence to consider and Nx. The default minimum sequence is 0 and Nx is N50.
+Usage:python geneAnnoFromSnps.py --snps <snp file> --gff3 <gff3 file>
+The script takes a snp file in a vcf format and a gff3 file for single chromosomes. It uses SNP coordinates to fetch genes overlapping the SNP. 
 Author: Kumar Saurabh Singh (ks575@exeter.ac.uk)
 """
 
@@ -16,7 +16,7 @@ try:
 
 except Exception as e:
    print("Unexpected error: {0}".format(e))
-   print("Usage:: %s python test.py --snp '<path>/test2.vcf' --gff3 '<path>/chr2.gff3'" % sys.argv[0])
+   print("Usage:: %s python geneAnnoFromSnps.py --snp '<path>/test2.vcf' --gff3 '<path>/chr2.gff3'" % sys.argv[0])
    sys.exit(2)
 
 
