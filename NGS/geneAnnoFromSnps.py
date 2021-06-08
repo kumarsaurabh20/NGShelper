@@ -63,8 +63,7 @@ try:
             return("NA")
 
     snpcode['genes'] = snpcode.apply(lambda x: gencode_all_known_genes(x[['seqname', 'location']], gencode_genes), axis=1)
-
-    print(snpcode.head(100))
+    snpcode.to_csv('merged.csv')
 
 except Exception as e:
     print("Unexpected logic error: {0}".format(e))
