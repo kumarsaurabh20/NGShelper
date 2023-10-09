@@ -15,6 +15,7 @@ fasta_file = ''
 min_length = int(0)
 nf = int(50)
 fasta_list = []
+nCount = 0
 
 try:
 	myopts, args = getopt.getopt(sys.argv[1:],"f:l:n:")
@@ -36,10 +37,14 @@ try:
 		if min_length:   
 			if len(s.seq) >= min_length:
 				fasta_list.append(str(s.seq))
+				ncount = str(s.seq).lower().count('n')
+				#gccount = str(s.seq).lower().count('g') + str(s.seq).lower().count('c') / (len(s.seq) - ncount)*100
+				#GC_list.append(gccount)
+				nCount += ncount
 			else:
 				continue
 		else:
-			fasta_list.append(str(s.seq))   
+			fasta_list.append(str(s.seq))  
 except IOError:
 	print("Usage::python calculate_Nx.py -f 'fasta file' -l 'minimum length' -n Nx")
 	sys.exit(2)
@@ -51,11 +56,13 @@ tot_length = len(fasta_str)
 nf_length = nf * tot_length/100
 temp_nf_list = []
 temp_sum = int(0)
+nCount_rounded = round(nCount,2)
 
 #Calculate other sequence stats
 shortest = len(fasta_list[-1])
 largest = len(fasta_list[0])
-GC_content = float((fasta_str.count('G') + fasta_str.count('C'))) / tot_length * 100
+GC_content = round(float((fasta_str.lower().count('g') + fasta_str.lower().count('c'))) / (tot_length - nCount) * 100,2)
+GC_rounded = round(GC_content,2)
 mean_len = numpy.mean([len(x) for x in fasta_list])
 median_len = numpy.median([len(x) for x in fasta_list])
 #Calculate N50 and L50
@@ -82,7 +89,7 @@ print("Shortest seq: %i" %(shortest))
 print(" ")
 print("Longest seq: %i" %(largest))
 print(" ")
-print("Mean length: %i" %(round(mean_len)))
+print("Mean length: %i" %(mean_len))
 print(" ")
 print("Median length: %i" %(median_len))
 print(" ")
@@ -90,7 +97,10 @@ print("Total sequences: %i" %(len(fasta_list)))
 print(" ")
 print("Total bases: %i" %(tot_length))
 print(" ")
-print("GC content: %f" %(GC_content))
+print("GC content: %.2f" %(GC_content))
 print(" ")
+print("# of Ns: %.2f" %(nCount))
+print(" ")
+print("Total ungapped length: %.2f" %(tot_length - nCount))
 print("#########################################")
 print(" ")
