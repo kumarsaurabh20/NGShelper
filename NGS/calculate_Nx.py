@@ -38,8 +38,6 @@ try:
 			if len(s.seq) >= min_length:
 				fasta_list.append(str(s.seq))
 				ncount = str(s.seq).lower().count('n')
-				#gccount = str(s.seq).lower().count('g') + str(s.seq).lower().count('c') / (len(s.seq) - ncount)*100
-				#GC_list.append(gccount)
 				nCount += ncount
 			else:
 				continue
