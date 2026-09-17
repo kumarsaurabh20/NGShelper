@@ -3,7 +3,7 @@
 """
 pdf_parser.py
 
-Layout-aware extraction of Results / results-like main-body text from scientific PDFs.
+Layout-aware extraction of Results / results-like main-body text from scientific PDFs mainly used in the HARVEST pipeline.
 
 Key features
 ------------
@@ -59,7 +59,7 @@ from collections import Counter
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 import pymupdf as fitz  # PyMuPDF (current API)
-
+#using fitz (PyMuPDF) for PDF parsing and layout analysis but importing fitz directly will not be supported in near future versions.
 
 
 # ============================================================
@@ -1794,7 +1794,7 @@ def save_batch_summary(results, output_file, detected_cores, workers):
 
 
 # ============================================================
-# CLI
+# CLI - all parameters
 # ============================================================
 
 def main():
